@@ -1,0 +1,23 @@
+#get-marina {
+    h2 {
+        color: var(--text-muted);
+    }
+    
+    p {
+        color: var(--text);
+    }
+    
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+        padding: 2rem 5rem;
+        border-radius: 15px;
+        background: var(--bg-dark);
+    }
+
+    button {
+        width: fit-content;
+    }
+}

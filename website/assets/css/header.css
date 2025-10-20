@@ -1,0 +1,279 @@
+:root {
+	--switch-height: 26px;
+}
+
+header {
+	display: flex;
+	width: 100%;
+	height: fit-content;
+	padding: 1.3rem 4rem;
+	background: var(--bg-dark);
+    margin-bottom: 2rem;
+}
+
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 50px;
+	height: var(--switch-height);
+    margin-left: auto;
+}
+
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+	border-radius: 20px;
+	transition: background-color 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.slider:before {
+	position: absolute;
+	content: "";
+	height: calc(var(--switch-height) / 6 * 4.5);
+	width: calc(var(--switch-height) / 6 * 4.5);
+	left: 1px;
+	top: 50%;
+	transform: translateY(-50%);
+	background-color: white;
+	border-radius: 20px;
+	transition: all 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+input:checked + .slider {
+	background-color: rgb(0, 175, 0);
+}
+
+input[data-function="theme"] {
+	& + .slider {
+		background-color: #d6f0fe;
+	}
+
+	& + .slider::before {
+		background-color: #fee925;
+		border: 2px solid #fff8bb;
+	}
+
+	&:checked + .slider {
+		background-color: #132f50;
+	}
+
+	&:checked ~ .cloud {
+		background: #26587c;
+		border: 1px solid #5f8fb0;
+	}
+
+	&:checked ~ .star,
+	&:checked + .slider .crater {
+		opacity: 1;
+	}
+
+	&:checked + .slider::before {
+		background-color: #e7e7e7;
+		border: 2px solid #f4f4f4;
+	}
+}
+
+.switch:has(input[data-function="theme"]) {
+	position: relative;
+	overflow: hidden;
+	border-radius: 20px;
+}
+
+input:focus + .slider {
+	box-shadow: 0 0 1px var(--primary);
+}
+
+input:checked + .slider:before {
+	-webkit-transform: translateX(25px);
+	-ms-transform: translateX(25px);
+	transform: translateX(25px) translateY(-50%);
+}
+
+.cloud {
+	width: 22px;
+	height: 10px;
+	display: block;
+	background: #87d4ff;
+	border-radius: 10px;
+	position: absolute;
+	border: 1px solid #c2e9ff;
+	z-index: 2;
+	transition: all 300ms 0 cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.cloud-1 {
+	top: -7px;
+	left: 12px;
+}
+
+.cloud-2 {
+	rotate: 180deg;
+	bottom: -4px;
+	left: 21.5px;
+}
+
+.cloud-3 {
+	rotate: 180deg;
+	bottom: -7px;
+	left: 8px;
+}
+
+.cloud::after,
+.cloud::before {
+	content: "";
+	border-bottom: inherit;
+	width: 10px;
+	height: 10px;
+	position: absolute;
+	margin-bottom: 5px;
+	display: inline-block;
+	background: inherit;
+	border-radius: inherit;
+	z-index: 1;
+	transition: inherit;
+}
+
+.cloud::before {
+	left: 5px;
+	top: 2px;
+}
+
+.cloud::after {
+	left: 5px;
+	top: 1.5px;
+}
+
+.star {
+	width: 1px;
+	height: 1px;
+	border-radius: 2px;
+	position: absolute;
+	background: #fff;
+	opacity: 0;
+	transition: all 300ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+	transition-delay: 100ms;
+}
+
+.star-1 {
+	top: 10px;
+	left: 5px;
+}
+
+.star-2 {
+	top: 5px;
+	left: 9px;
+}
+
+.star-3 {
+	top: 10.5px;
+	left: 11px;
+}
+
+.star-4 {
+	top: 16px;
+	left: 15px;
+}
+
+.star-5 {
+	top: 10px;
+	left: 21px;
+}
+
+.star-6 {
+	padding: 1px;
+	top: 5px;
+	left: 21px;
+}
+
+input[data-function="theme"]:checked + .slider .crater {
+	transition: all 500ms;
+}
+
+input[data-function="theme"]:checked + .slider .crater-1 {
+	transition-delay: calc(200ms + 1 * 75ms);
+}
+input[data-function="theme"]:checked + .slider .crater-2 {
+	transition-delay: calc(200ms + 2 * 75ms);
+}
+input[data-function="theme"]:checked + .slider .crater-3 {
+	transition-delay: calc(200ms + 3 * 75ms);
+}
+input[data-function="theme"]:checked + .slider .crater-4 {
+	transition-delay: calc(200ms + 4 * 75ms);
+}
+input[data-function="theme"]:checked + .slider .crater-5 {
+	transition-delay: calc(200ms + 5 * 75ms);
+}
+input[data-function="theme"]:checked + .slider .crater-6 {
+	transition-delay: calc(200ms + 6 * 75ms);
+}
+
+.crater {
+	background: #b3b3b3;
+	display: block;
+	border-radius: 10px;
+	position: absolute;
+	opacity: 0;
+	transition: none;
+}
+
+.crater-1,
+.crater-2 {
+	width: 4.5px;
+	height: 4.5px;
+}
+
+.crater-3,
+.crater-4 {
+	width: 2.25px;
+	height: 2.25px;
+}
+
+.crater-5,
+.crater-6 {
+	width: 1.125px;
+	height: 1.125px;
+}
+
+.crater-1 {
+	right: 13.5px;
+	bottom: 12px;
+}
+
+.crater-2 {
+	right: 12px;
+	bottom: 5.5px;
+}
+
+.crater-3 {
+	right: 8px;
+	bottom: 6px;
+}
+
+.crater-4 {
+	right: 6px;
+	bottom: 12px;
+}
+
+.crater-5 {
+	right: 9px;
+	bottom: 10.5px;
+}
+
+.crater-6 {
+	right: 11px;
+	bottom: 17px;
+}

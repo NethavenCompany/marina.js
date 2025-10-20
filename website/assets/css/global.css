@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Zalando+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+ul {
+    list-style: none;
+}
+
+button, a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+:root.light {
+    --bg-dark: lch(100% 0.01 296.81);
+    --bg: lch(95% 0.01 296.81);
+    --bg-light: lch(90% 0.01 296.81);
+
+    --text: oklch(40.64% 0 296.81);
+    --text-muted: oklch(78.07% 0.01 296.81);
+    --text-contrast: oklch(98.27% 0.01 296.81);
+
+    --primary: #9352F2;
+    --secondary: oklch(0.775 0.1244 297.73);
+}
+
+:root.dark {
+    --bg-dark: lch(2.5% 0.01 296.81);
+    --bg: lch(5% 0.01 296.81);
+    --bg-light: lch(10% 0.01 296.81);
+
+    --text: oklch(80.64% 0 296.81);
+    --text-muted: oklch(60.07% 0.01 296.81);
+    --text-contrast: oklch(98.27% 0.01 296.81);
+
+    --primary: #9352F2;
+    --secondary: oklch(0.425 0.1244 297.73);
+}
+
+html, body {
+    font-family: "Zalando Sans", sans-serif;
+    font-optical-sizing: auto;
+    color: var(--text);
+    background: var(--bg);
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+section {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 4rem 4rem 4rem;
+    position: relative;
+}
+
+h1, h2 {
+    font-weight: 500;
+}
+
+h1 {
+    font-size: 2.2em;
+}
+
+h2 { 
+    font-size: 1.8em;
+}
+
+.btn {
+    padding: 0.8rem 1.7rem;
+    border-radius: 10px;
+    border: none;
+    font-size: 0.9rem;
+    border: 2px solid var(--secondary);
+    background: var(--primary);
+    color: var(--text-contrast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+}
+
+.-disabled {
+    opacity: 0.4;
+    filter: saturate(0.8);
+}
+
+.-no-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+}
+
+code {
+    font-family: "Zalando Sans", serif;
+    padding: 0.05rem 0.2rem;
+    background-color: var(--bg-light);
+    border-radius: 3px;
+}
+
+p {
+    letter-spacing: 1px;
+}

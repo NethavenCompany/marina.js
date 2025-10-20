@@ -1,0 +1,90 @@
+#hero {
+    justify-content: center;
+    align-items: center;
+
+    .marina-version-tag {
+        background: var(--bg-light);
+        color: var(--text-muted);
+        padding: 0.2rem 0.5rem;
+        border-radius: 5px;
+        position: absolute;
+        margin: 0 0 0 30rem;
+    }
+    
+    h1 {
+        padding: 0.5rem;
+        color: var(--text-muted);
+        font-family: "Josefin Sans", sans-serif;
+        text-align: center;
+    }
+
+    > svg {
+        height: 15rem;
+    }
+
+    ul {
+        display: flex;
+        padding: 2rem;
+        gap: 2rem;
+    }
+
+    ul a ion-icon {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    #hero {
+        padding: 2rem;
+
+        .marina-version-tag {
+            margin: 0 0 0 18rem;
+            font-size: 0.9rem;
+        }
+
+        > svg {
+            height: 10rem;
+        }
+
+        ul {
+            padding: 1.2rem;
+            gap: 1rem;
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    #hero {
+        padding: 1rem;
+
+        .marina-version-tag {
+            margin: 0 0 8rem 6.5rem;
+            font-size: 0.8rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        > svg {
+            height: 6rem;
+        }
+
+        ul {
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        ul a {
+            width: 100%;
+            text-align: center;
+        }
+    }
+}
+
+@media (max-width: 320px) {
+    .marina-version-tag {
+        display: none;
+    }
+}

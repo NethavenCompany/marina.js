@@ -1,0 +1,40 @@
+{
+  "name": "@nethaven/marina",
+  "version": "1.0.0",
+  "description": "UI toolkit by Nethaven",
+  "keywords": [
+    "ui",
+    "ui toolkit",
+    "javascript"
+  ],
+  "homepage": "https://github.com/NethavenCompany/marina.js#readme",
+  "bugs": {
+    "url": "https://github.com/NethavenCompany/marina.js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NethavenCompany/marina.js.git"
+  },
+  "license": "ISC",
+  "author": "Nethaven",
+  "type": "module",
+  "main": "dist/marina.global.js",
+  "module": "dist/marina.esm.js",
+  "browser": "dist/marina.global.js",
+  "exports": {
+    ".": {
+      "import": "./dist/marina.esm.js",
+      "require": "./dist/marina.global.js"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typecheck": "tsc --noEmit",
+    "generate:filetree-json": "node ./scripts/generate-filetree-json.js",
+    "build:esbuild": "node ./scripts/esbuild.js",
+    "build": "npm run typecheck && npm run build:esbuild && npm run generate:filetree-json"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.11"
+  }
+}
