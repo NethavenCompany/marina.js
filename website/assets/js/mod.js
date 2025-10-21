@@ -110,3 +110,12 @@ const storedTheme = getStoredTheme();
 setTheme(storedTheme);
 
 PAGE_ELEMENTS.themeSwitch.checked = storedTheme === "light" ? false : true
+
+marina.theme.addTheme({
+	id: "light",
+	colors: {
+		
+	}
+})
+
+console.log(marina.theme)

@@ -17,6 +17,7 @@ header {
 	width: 50px;
 	height: var(--switch-height);
     margin-left: auto;
+    cursor: pointer;
 }
 
 .switch input {
@@ -27,7 +28,6 @@ header {
 
 .slider {
 	position: absolute;
-	cursor: pointer;
 	top: 0;
 	left: 0;
 	right: 0;

@@ -233,33 +233,39 @@ var Marina = (() => {
     id: "mra-DefaultTheme"
   };
   var ThemeManager = class {
+    #currentTheme;
     constructor() {
-      this.currentTheme = DEFAULT_THEME;
+      this.#currentTheme = DEFAULT_THEME;
     }
     setCurrentTheme(themeId) {
       const theme = this.getTheme(themeId);
-      this.#buildRootCss(theme);
+      this.#buildThemeCss(theme);
+      this.#setRootClass(theme.id);
+    }
+    getCurrentTheme() {
+      return this.#currentTheme;
     }
     getTheme(themeId) {
       return this.#localStorage.get(themeId);
     }
+    modifyTheme(themeId, themeData) {
+      const exisitingTheme = this.getTheme(themeId);
+      const modifiedTheme = { ...exisitingTheme, ...themeData };
+      this.#localStorage.set(themeId, modifiedTheme);
+    }
     addTheme(theme) {
+      if (this.getTheme(theme.id)) {
+        throw new Error("");
+      }
       this.#localStorage.set(theme.id, theme);
     }
-    #destroyRootCss(rootCssId) {
-      const rootCss = document.querySelector(rootCssId);
-      if (rootCss) rootCss.remove();
+    removeTheme(themeId) {
     }
-    #buildRootCss(theme) {
-      const head = document.head;
-      const rootCssId = `mra-${theme.id}-root-css`;
-      this.#destroyRootCss(rootCssId);
-      const rootCss = createElement("style", {
-        id: rootCssId,
-        innerHTML: `
-
-            `
-      });
+    #buildThemeCss(theme) {
+    }
+    #destroyThemeCss(themeId) {
+    }
+    #setRootClass(themeId) {
     }
     get #localStorage() {
       return {
@@ -283,7 +289,7 @@ var Marina = (() => {
     ...components_exports,
     ...core_exports,
     ...utils_exports,
-    Themes: new ThemeManager_default()
+    theme: new ThemeManager_default()
   };
   var marina_default = Marina;
 

@@ -1,7 +1,4 @@
-import {
-	minifyFileContent,
-	objectToArray,
-} from "./util.js";
+import { minifyFileContent, objectToArray } from "./util.js";
 import { createFile } from "../marina/marina.esm.js";
 
 const DEFAULT_TEMPLATE_OPTIONS = {
@@ -31,27 +28,26 @@ function reduceTree(fileTree, chosenProps) {
 	return fileTree;
 }
 
-
 export async function build(
 	chosenTreeProps = {},
 	options = DEFAULT_TEMPLATE_OPTIONS
 ) {
 	const marinaFileTree = await getFileTree();
-	let jsContent = objectToArray(
-		reduceTree(marinaFileTree, chosenTreeProps),
-		"values"
-	).map((item) => {
-		if(typeof item === "string") return item;
-		else return JSON.stringify(item);
-	}).join(" ");
+	const selectedContent = reduceTree(marinaFileTree, chosenTreeProps);
+	let jsContent = objectToArray(selectedContent, "values")
+		.map((item) => {
+			if (typeof item === "string") return item;
+			else return JSON.stringify(item);
+		})
+		.join(" ");
 
 	if (options.minify) jsContent = minifyFileContent(jsContent);
 
 	const finalBuild = createFile(jsContent, {
 		name: options.filename,
-		type: "text/javascript"
+		type: "text/javascript",
 	});
 
-	finalBuild.download()
+	finalBuild.download();
 	finalBuild.remove();
 }

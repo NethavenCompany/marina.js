@@ -88,6 +88,20 @@ rect.checklist-icon {
 	}
 }
 
+@keyframes fade-out {
+	from {
+		opacity: 0.5;
+	}
+	to {
+		opacity: 0.1;
+	}
+}
+
 .logo-glow {
-    animation: logo-glow 2s ease-out infinite alternate forwards;
+	animation: logo-glow 2s ease-out infinite alternate forwards;
+}
+
+.logo-glow-ray {
+	opacity: 0.5;
+	animation: fade-out 2s ease-out infinite alternate forwards;
 }
