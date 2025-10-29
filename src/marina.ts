@@ -1,18 +1,15 @@
-import pkg from "../package.json";
-
+import * as constants from "./const.js";
 import * as components from "./components/index.js";
 import * as core from "./core/index.js";
 import * as utils from "./utils/index.js";
-import * as theme from "./theme/index.js";
 
-console.log(`Marina v${pkg.version}`)
+console.log(`Marina v${constants.VERSION}`);
 
 const Marina = {
-	version: pkg.version,
+	version: constants.VERSION,
 	...components,
-	...core,
 	...utils,
-	Themes: new theme.ThemeManager(),
+	...core
 };
 
 export * from "./components/index.js";
