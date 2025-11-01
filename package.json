@@ -32,9 +32,10 @@
     "typecheck": "tsc --noEmit",
     "generate:filetree-json": "node ./scripts/generate-filetree-json.js",
     "build:esbuild": "node ./scripts/esbuild.js",
-    "build": "npm run typecheck && npm run build:esbuild && npm run generate:filetree-json"
+    "build": "clear && npm run typecheck && npm run build:esbuild"
   },
   "devDependencies": {
-    "esbuild": "^0.25.11"
+    "esbuild": "^0.25.11",
+    "svgo": "^4.0.0"
   }
 }
