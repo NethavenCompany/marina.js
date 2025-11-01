@@ -2,6 +2,8 @@ import pkg from "../package.json";
 
 export const VERSION = pkg.version;
 
+export const ICON_CACHE = new Map<string, string>();
+
 export const ASPECT_RATIOS = {
 	A4: {
 		maxWidth: 826,
