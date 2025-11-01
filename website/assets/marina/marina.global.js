@@ -21,18 +21,21 @@ var Marina = (() => {
   // src/index.ts
   var index_exports = {};
   __export(index_exports, {
-    Carousel: () => Carousel_default,
     Component: () => Component_default,
-    Icon: () => Icon_default,
-    Modal: () => Modal_default,
-    Plugin: () => BasePlugin_default,
-    Select: () => Select_default,
-    Tabs: () => Tabs_default,
-    Tooltip: () => Tooltip_default,
     createElement: () => createElement,
     createFile: () => createFile,
     default: () => index_default,
-    setAttributes: () => setAttributes
+    hex: () => hex,
+    hsl: () => hsl,
+    lch: () => lch,
+    minifyCss: () => minifyCss,
+    oklch: () => oklch,
+    resizeToAspectRatio: () => resizeToAspectRatio,
+    rgb: () => rgb,
+    rgba: () => rgba,
+    setAttributes: () => setAttributes,
+    useLocalStore: () => useLocalStore,
+    useSessionStore: () => useSessionStore
   });
 
   // package.json
@@ -70,92 +73,66 @@ var Marina = (() => {
       typecheck: "tsc --noEmit",
       "generate:filetree-json": "node ./scripts/generate-filetree-json.js",
       "build:esbuild": "node ./scripts/esbuild.js",
-      build: "npm run typecheck && npm run build:esbuild && npm run generate:filetree-json"
+      build: "clear && npm run typecheck && npm run build:esbuild"
     },
     devDependencies: {
-      esbuild: "^0.25.11"
+      esbuild: "^0.25.11",
+      svgo: "^4.0.0"
+    }
+  };
+
+  // src/const.ts
+  var VERSION = package_default.version;
+  var ASPECT_RATIOS = {
+    A4: {
+      maxWidth: 826,
+      maxHeight: 1066
+    },
+    A3: {
+      maxWidth: 1166,
+      maxHeight: 826
+    },
+    A2: {
+      maxWidth: 1166,
+      maxHeight: 826
     }
   };
 
   // src/components/index.ts
   var components_exports = {};
-  __export(components_exports, {
-    Carousel: () => Carousel_default,
-    Modal: () => Modal_default,
-    Select: () => Select_default,
-    Tabs: () => Tabs_default,
-    Tooltip: () => Tooltip_default
-  });
-
-  // src/core/Component.ts
-  var Component = class {
-    constructor() {
-      this.settings = null;
-    }
-    setSettings() {
-    }
-  };
-  var Component_default = Component;
-
-  // src/components/Carousel.ts
-  var Carousel = class extends Component_default {
-  };
-  var Carousel_default = Carousel;
-
-  // src/components/Tabs.ts
-  var Tabs = class extends Component_default {
-  };
-  var Tabs_default = Tabs;
-
-  // src/components/Modal.ts
-  var Modal = class extends Component_default {
-  };
-  var Modal_default = Modal;
-
-  // src/components/Select.ts
-  var Select = class extends Component_default {
-  };
-  var Select_default = Select;
-
-  // src/components/Tooltip.ts
-  var Tooltip = class extends Component_default {
-  };
-  var Tooltip_default = Tooltip;
 
   // src/core/index.ts
   var core_exports = {};
   __export(core_exports, {
-    Component: () => Component_default,
-    Icon: () => Icon_default,
-    Plugin: () => BasePlugin_default
+    Component: () => Component_default
   });
 
-  // src/core/Icon.ts
-  var Icon = class {
-  };
-  var Icon_default = Icon;
-
-  // src/core/BasePlugin.ts
-  var Plugin = class {
+  // src/core/Component.ts
+  var Component = class extends HTMLElement {
     constructor() {
-    }
-    install() {
-    }
-    enable() {
-    }
-    disable() {
-    }
-    uninstall() {
+      super();
+      this.settings = {};
+      this.settings = {};
     }
   };
-  var BasePlugin_default = Plugin;
+  var Component_default = Component;
 
   // src/utils/index.ts
   var utils_exports = {};
   __export(utils_exports, {
     createElement: () => createElement,
     createFile: () => createFile,
-    setAttributes: () => setAttributes
+    hex: () => hex,
+    hsl: () => hsl,
+    lch: () => lch,
+    minifyCss: () => minifyCss,
+    oklch: () => oklch,
+    resizeToAspectRatio: () => resizeToAspectRatio,
+    rgb: () => rgb,
+    rgba: () => rgba,
+    setAttributes: () => setAttributes,
+    useLocalStore: () => useLocalStore,
+    useSessionStore: () => useSessionStore
   });
 
   // src/utils/dom.ts
@@ -228,68 +205,216 @@ var Marina = (() => {
     };
   }
 
-  // src/theme/ThemeManager.ts
-  var DEFAULT_THEME = {
-    id: "mra-DefaultTheme"
-  };
-  var ThemeManager = class {
-    #currentTheme;
-    constructor() {
-      this.#currentTheme = DEFAULT_THEME;
-    }
-    setCurrentTheme(themeId) {
-      const theme = this.getTheme(themeId);
-      this.#buildThemeCss(theme);
-      this.#setRootClass(theme.id);
-    }
-    getCurrentTheme() {
-      return this.#currentTheme;
-    }
-    getTheme(themeId) {
-      return this.#localStorage.get(themeId);
-    }
-    modifyTheme(themeId, themeData) {
-      const exisitingTheme = this.getTheme(themeId);
-      const modifiedTheme = { ...exisitingTheme, ...themeData };
-      this.#localStorage.set(themeId, modifiedTheme);
-    }
-    addTheme(theme) {
-      if (this.getTheme(theme.id)) {
-        throw new Error("");
+  // src/utils/resize.ts
+  function resizeToAspectRatio(element, aspectRatio) {
+    const { maxWidth, maxHeight } = ASPECT_RATIOS[aspectRatio];
+    const parent = element.parentElement;
+    if (!parent) return;
+    element.style.transform = "";
+    const parentWidth = parent.clientWidth - 40;
+    const parentHeight = parent.clientHeight;
+    const widthScale = Math.min(1, parentWidth / maxWidth);
+    const heightScale = Math.min(1, parentHeight / maxHeight);
+    const scale = Math.min(widthScale, heightScale);
+    element.style.width = maxWidth + "px";
+    element.style.height = maxHeight + "px";
+    element.style.maxWidth = maxWidth + "px";
+    element.style.maxHeight = maxHeight + "px";
+    element.style.transformOrigin = "top left";
+    element.style.transform = `scale(${scale})`;
+  }
+
+  // src/utils/colors.ts
+  function hex() {
+  }
+  function rgb() {
+  }
+  function rgba() {
+  }
+  function hsl() {
+  }
+  function lch() {
+  }
+  function oklch() {
+  }
+
+  // src/core/Store.ts
+  var StoreEvent = class extends CustomEvent {
+    constructor(name, details) {
+      super(name, {});
+      for (const [key, value] of Object.entries(details)) {
+        this[key] = value;
       }
-      this.#localStorage.set(theme.id, theme);
     }
-    removeTheme(themeId) {
-    }
-    #buildThemeCss(theme) {
-    }
-    #destroyThemeCss(themeId) {
-    }
-    #setRootClass(themeId) {
-    }
-    get #localStorage() {
-      return {
-        set: (themeId, data) => {
-          localStorage.setItem(themeId, JSON.stringify(data));
-        },
-        get: (themeId) => {
-          const data = localStorage.getItem(themeId);
-          if (!data) return null;
-          return JSON.parse(data);
+  };
+  var Store = class {
+    constructor(storeId, defaultProducts = {}, storage) {
+      this.subscriptions = /* @__PURE__ */ new Map();
+      // Storage methods
+      // ========================
+      this.get = (product) => {
+        if (product) {
+          return this.products[product];
+        }
+        return this.products;
+      };
+      this.has = (product) => {
+        return product in this.products;
+      };
+      this.hasAll = (products) => {
+        return Object.keys(products).every((product) => this.has(product));
+      };
+      this.set = (products) => {
+        const oldProducts = { ...this.products };
+        const newProducts = { ...products };
+        this.products = { ...this.products, ...products };
+        this.#save();
+        const result = {
+          products: this.products,
+          oldProducts,
+          newProducts
+        };
+        dispatchEvent(this.#event("set" /* Set */, result));
+        return result;
+      };
+      this.remove = (...products) => {
+        const oldProducts = { ...this.products };
+        const removedProducts = {};
+        products.forEach((product) => {
+          removedProducts[product] = this.products[product];
+          delete this.products[product];
+        });
+        this.#save();
+        const result = {
+          products: this.products,
+          oldProducts,
+          removedProducts
+        };
+        dispatchEvent(this.#event("remove" /* Remove */, result));
+        return result;
+      };
+      this.clear = () => {
+        const oldProducts = { ...this.products };
+        this.products = {};
+        this.#save();
+        const result = {
+          products: this.products,
+          oldProducts
+        };
+        dispatchEvent(this.#event("clear" /* Clear */, result));
+        return result;
+      };
+      this.destroy = () => {
+        this.subscriptions.forEach((_listener, subscription) => {
+          this.unsubscribeElement(subscription);
+        });
+        this.subscriptions.clear();
+        this.storage.removeItem(this.id);
+        const result = {
+          products: this.products
+        };
+        dispatchEvent(this.#event("destroy" /* Destroy */, result));
+        return result;
+      };
+      // Event handling
+      // ========================
+      this.on = (event, cb) => {
+        const eventId = `${this.id}__${event}`;
+        addEventListener(eventId, (event2) => {
+          cb(event2, this);
+        });
+      };
+      this.subscribeElement = (subscription) => {
+        this.#repopulateSubscription(subscription);
+        const listener = (event) => this.#handleSubscription(subscription, event);
+        this.subscriptions.set(subscription, listener);
+        subscription.element.addEventListener(subscription.event, listener);
+      };
+      this.unsubscribeElement = (subscription) => {
+        const listener = this.subscriptions.get(subscription);
+        if (listener) {
+          subscription.element.removeEventListener(subscription.event, listener);
+          this.subscriptions.delete(subscription);
         }
       };
+      this.id = storeId;
+      this.products = defaultProducts;
+      this.defaultProducts = defaultProducts;
+      this.storage = storage;
+      this.#prepare();
+    }
+    // Protected methods
+    // ========================
+    #repopulateSubscription(subscription) {
+      const storedItem = this.products[subscription.product];
+      subscription.element.setAttribute(
+        subscription.attribute,
+        JSON.stringify(storedItem)
+      );
+      if (subscription.cb) subscription.cb(this);
+    }
+    #handleSubscription(subscription, event) {
+      const target = event.target;
+      const newProduct = target[subscription.attribute];
+      const productSet = {};
+      productSet[subscription.product] = newProduct;
+      this.set(productSet);
+      if (subscription.cb) subscription.cb(this);
+    }
+    #event(type, details = {}) {
+      const eventId = `${this.id}__${type}`;
+      return new StoreEvent(eventId, details);
+    }
+    #save() {
+      this.storage.setItem(this.id, JSON.stringify(this.products));
+    }
+    #prepare() {
+      const storedData = this.storage.getItem(this.id);
+      if (storedData) {
+        this.products = { ...this.products, ...JSON.parse(storedData) };
+      }
+      this.#save();
     }
   };
-  var ThemeManager_default = ThemeManager;
+
+  // src/utils/storage.ts
+  function useStoreMethods(store) {
+    return {
+      id: store.id,
+      products: store.products,
+      get: store.get,
+      has: store.has,
+      hasAll: store.hasAll,
+      set: store.set,
+      remove: store.remove,
+      clear: store.clear,
+      destroy: store.destroy,
+      on: store.on,
+      subscribeElement: store.subscribeElement,
+      unsubscribeElement: store.unsubscribeElement
+    };
+  }
+  function useSessionStore(storeId, defaultProducts = {}) {
+    const sessionStore = new Store(storeId, defaultProducts, sessionStorage);
+    return useStoreMethods(sessionStore);
+  }
+  function useLocalStore(storeId, defaultProducts = {}) {
+    const localStore = new Store(storeId, defaultProducts, localStorage);
+    return useStoreMethods(localStore);
+  }
+
+  // src/utils/minify.ts
+  function minifyCss(...css) {
+    return css.join(" ").replace(/\/\*[\s\S]*?\*\//g, "").replace(/\s*{\s*/g, "{").replace(/;\s*/g, ";").replace(/\s*}\s*/g, "}").replace(/:\s*/g, ":").replace(/,\s*/g, ",").replace(/\s+/g, " ").trim();
+  }
 
   // src/marina.ts
-  console.log(`Marina v${package_default.version}`);
+  console.log(`Marina v${VERSION}`);
   var Marina = {
-    version: package_default.version,
+    version: VERSION,
     ...components_exports,
-    ...core_exports,
     ...utils_exports,
-    theme: new ThemeManager_default()
+    ...core_exports
   };
   var marina_default = Marina;
 

@@ -1,5 +1,8 @@
 import { build } from "./build-marina.js";
-import marina, { createElement } from "../marina/marina.esm.js";
+import marina, {
+	createElement,
+	useLocalStore,
+} from "../marina/marina.esm.js";
 
 function getTreeInputs() {
 	return {};
@@ -11,34 +14,6 @@ function getShouldMinify() {
 
 function getFilename() {
 	return "marina.js";
-}
-
-function getStoredTheme() {
-	const storedTheme = localStorage.getItem("marina-theme");
-	if (storedTheme) {
-		return storedTheme;
-	}
-	const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-	return prefersDark ? "dark" : "light";
-}
-
-function setTheme(newTheme) {
-	const themes = ["light", "dark"];
-	const root = document.querySelector(":root");
-
-	for (const theme of themes) {
-		root.classList.remove(theme);
-	}
-
-	root.classList.add(newTheme);
-	localStorage.setItem("marina-theme", newTheme);
-}
-
-function switchTheme() {
-	const nextTheme = document.querySelector(":root").classList.contains("light")
-		? "dark"
-		: "light";
-	setTheme(nextTheme);
 }
 
 const PAGE_ELEMENTS = {
@@ -57,7 +32,6 @@ function createVersionTag() {
 
 	return versionTag;
 }
-
 function createMarinaBuildForm() {
 	const title = createElement("h2", {
 		innerText: "Get marina",
@@ -86,6 +60,7 @@ function createMarinaBuildForm() {
 		},
 		innerText: "Download marina.js",
 		className: "btn -disabled",
+		disabled: true,
 	});
 
 	const form = createElement("form", {}, [
@@ -100,22 +75,25 @@ function createMarinaBuildForm() {
 
 PAGE_ELEMENTS.hero.append(createVersionTag());
 PAGE_ELEMENTS.getMarina.append(createMarinaBuildForm());
-PAGE_ELEMENTS.themeSwitch.addEventListener("click", switchTheme);
-PAGE_ELEMENTS.radioIcon.addEventListener("click", () => {
-	PAGE_ELEMENTS.radioIconInner.classList.toggle("active");
+PAGE_ELEMENTS.radioIcon.addEventListener("click", () =>
+	PAGE_ELEMENTS.radioIconInner.classList.toggle("active")
+);
+
+const settings = useLocalStore("settings", { theme: true });
+
+settings.subscribeElement({
+	element: PAGE_ELEMENTS.themeSwitch,
+	product: "theme",
+	event: "change",
+	attribute: "checked",
+	cb: ({ products }) => {
+		const themes = ["light", "dark"];
+		const root = document.querySelector(":root");
+		for (const theme of themes) root.classList.remove(theme);
+		root.classList.add(products.theme ? "dark" : "light");
+	},
 });
 
-const storedTheme = getStoredTheme();
+PAGE_ELEMENTS.themeSwitch.checked = settings.get("theme");
 
-setTheme(storedTheme);
-
-PAGE_ELEMENTS.themeSwitch.checked = storedTheme === "light" ? false : true
-
-marina.theme.addTheme({
-	id: "light",
-	colors: {
-		
-	}
-})
-
-console.log(marina.theme)
+console.log(marina);
