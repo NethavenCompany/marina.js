@@ -1,10 +1,10 @@
-class Component {
-    settings: Record<string, any> | null = null;
-    constructor() {};
-
-    setSettings() {
-        
-    }
+class Component extends HTMLElement {
+    settings: Record<string, any> = {};
+    
+    constructor() {
+        super() 
+        this.settings = {};
+    };
 }
 
 export default Component;
