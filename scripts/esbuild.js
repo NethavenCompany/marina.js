@@ -56,12 +56,14 @@ await Promise.all([
 
 await Promise.all([
 	// ESM build
+	console.log("Building ESM build..."),
 	esbuild.build({
 		...GLOBAL_CONFIG,
 		format: "esm",
 		outfile: "dist/marina.esm.js",
 	}),
 	// Minified ESM
+	console.log("Building Minified ESM build..."),
 	esbuild.build({
 		...GLOBAL_CONFIG,
 		format: "esm",
@@ -69,6 +71,7 @@ await Promise.all([
 		minify: true
 	}),
 	// IIFE build
+	console.log("Building IIFE build..."),
 	esbuild.build({
 		...GLOBAL_CONFIG,
 		format: "iife",
@@ -76,6 +79,7 @@ await Promise.all([
 		outfile: "dist/marina.global.js",
 	}),
 	// Minified IIFE
+	console.log("Building Minified IIFE build..."),
 	esbuild.build({
 		...GLOBAL_CONFIG,
 		format: "iife",
@@ -86,6 +90,7 @@ await Promise.all([
 ]);
 
 // Copy over all builds to the landing page assets
+console.log("Copying builds to landing page assets..."),
 await Promise.all([
 	fs.promises.copyFile("dist/marina.esm.js", COPY_DEST + "marina.esm.js"),
 	fs.promises.copyFile("dist/marina.esm.min.js", COPY_DEST + "marina.esm.min.js"),
