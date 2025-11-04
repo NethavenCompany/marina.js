@@ -30,12 +30,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "typecheck": "tsc --noEmit",
-    "generate:filetree-json": "node ./scripts/generate-filetree-json.js",
-    "build:esbuild": "node ./scripts/esbuild.js",
-    "build": "clear && npm run typecheck && npm run build:esbuild"
+    "build:marina": "node ./scripts/build.js",
+    "build": "clear && npm run typecheck && npm run build:marina"
   },
   "devDependencies": {
     "esbuild": "^0.25.11",
+    "fs-extra": "^11.3.2",
     "svgo": "^4.0.0"
   }
 }
