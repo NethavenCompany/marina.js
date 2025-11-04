@@ -6,9 +6,13 @@ button, a {
     text-decoration: none;
 }
 
+:root {
+   --section-padding: 2rem 4rem 4rem 4rem;
+}
+
 :root.light {
     --bg-dark: lch(100% 0.01 296.81);
-    --bg: lch(95% 0.01 296.81);
+    --bg: lch(95.5% 0.01 296.81);
     --bg-light: lch(90% 0.01 296.81);
 
     --text: oklch(40.64% 0 296.81);
@@ -48,12 +52,15 @@ section {
     height: fit-content;
     display: flex;
     flex-direction: column;
-    padding: 2rem 4rem 4rem 4rem;
+    padding: var(--section-padding);
     position: relative;
 }
 
 h1, h2 {
     font-weight: 500;
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    color: var(--text);
 }
 
 h1 {

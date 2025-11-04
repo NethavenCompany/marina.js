@@ -2,7 +2,7 @@ import { build } from "./build-marina.js";
 import marina, {
 	createElement,
 	useLocalStore,
-} from "../marina/marina.esm.js";
+} from "./dist/marina.js";
 
 function getTreeInputs() {
 	return {};

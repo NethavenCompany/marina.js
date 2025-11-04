@@ -1,5 +1,5 @@
 import { minifyFileContent, objectToArray } from "./util.js";
-import { createFile } from "../marina/marina.esm.js";
+import { createFile } from "./marina.esm.js";
 
 const DEFAULT_TEMPLATE_OPTIONS = {
 	filename: "marina.js",
