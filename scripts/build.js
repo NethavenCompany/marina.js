@@ -10,10 +10,6 @@ const GLOBAL_CONFIG = {
 	resolveExtensions: [".ts", ".tsx", ".js"],
 };
 
-async function ensureDirectories() {
-
-}
-
 async function clearDistributables() {
 	await fs.remove("dist");
 	await fs.remove("website/assets/js/dist");
@@ -21,7 +17,6 @@ async function clearDistributables() {
 
 async function build() {
 	await clearDistributables();
-	await ensureDirectories();
 	
 	await Promise.all([
 		createMarina({ format: "esm", outfile: "dist/marina.js" }),
