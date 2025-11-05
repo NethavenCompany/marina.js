@@ -1,4 +1,4 @@
-import { createElement } from "./dom.js";
+import { createElement } from "../dom/elements";
 
 type FileType =
 	| "text/json"

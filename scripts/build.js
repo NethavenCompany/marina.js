@@ -3,77 +3,82 @@ import fs from "fs-extra";
 import path from "path";
 import { optimize } from "svgo";
 
+import {
+	clearDistributables,
+	configDefaults,
+	distDescription,
+	getPackagePaths,
+} from "./utils.js";
+
 const GLOBAL_CONFIG = {
-	entryPoints: ["src/index.ts"],
 	platform: "browser",
 	bundle: true,
 	resolveExtensions: [".ts", ".tsx", ".js"],
 };
 
-async function clearDistributables() {
-	await fs.remove("dist");
-	await fs.remove("website/assets/js/dist");
-}
-
 async function build() {
 	await clearDistributables();
-	
+
 	await Promise.all([
-		createMarina({ format: "esm", outfile: "dist/marina.js" }),
-		createMarina({ format: "esm", outfile: "dist/marina.min.js", minify: true }),
-		createMarina({ format: "iife", globalName: "Marina", outfile: "dist/marina.global.js" }),
-		createMarina({ format: "iife", globalName: "Marina", outfile: "dist/marina.global.min.js", minify: true }),
+		// The icons package is mainly svgs so needs a more specific build step.
+		createIconsDist(),
+		// everything else is typescript and the same structure so can use a similair build step.
+		createDist("utils", { format: "esm" }),
+		createDist("ui", { format: "esm" }),
+
+		// Lastly we create the marina package, which is just the previous 3 packages combined into one.
+		createDist("marina", { format: "esm", outfile: "marina.js" }),
+		createDist("marina", { minify: true, format: "esm", outfile: "marina.min.js" }),
+		createDist("marina", { format: "iife", outfile: "marina.global.js", globalName: "Marina" }),
+		createDist("marina", { minify: true, format: "iife", outfile: "marina.global.min.js", globalName: "Marina" }),
 	]);
-	
-	// await combineCssFiles("src/css");
-	await optimizeSvgs("src/svg");
 
-	await fs.copy("src/svg", "dist/icons");
-
-	await fs.copy("dist", "website/assets/js/dist");
+	// copy marina to static assets.
+	await fs.copy(getPackagePaths("marina").distDir, "website/assets/js/dist");
 }
 
 // ===============================
 // File Builders
 // ===============================
 
-async function createMarina(config) {
-	const { format, minify, outfile } = config;
-	const description = `${minify ? "minified" : ""} ${format.toUpperCase()} build of Marina: ${outfile}`.trim();
+async function createDist(pkgName, config) {
+	const { minify, format, outfile } = configDefaults(config);
+	const pkg = getPackagePaths(pkgName, outfile);
+	const description = distDescription(minify, format);
+	const esbuildConfig = {
+		...GLOBAL_CONFIG,
+		...config,
+		entryPoints: [pkg.indexFile],
+		outfile: pkg.outfile
+	};
 
-	console.log(`Creating ${description}...`);
+	console.log(`Creating ${description} for ${pkgName} - outfile: ${pkg.outfile}`);
 
 	try {
-		return await esbuild.build({
-			...GLOBAL_CONFIG,
-			...config,
-		});
+		return await esbuild.build(esbuildConfig);
 	} catch (error) {
-		console.error(`Error creating ${description}:`, error);
+		console.error(`Error creating ${description} for ${pkgName}:`, error);
 		throw error;
 	}
+}
+
+async function createIconsDist() {
+	const pkg = getPackagePaths("icons");
+	const svgsDir = path.join(pkg.rootDir, "svg");
+	const distIconDir = path.join(pkg.distDir, "icons");
+
+	await optimizeSvgs(svgsDir);
+
+	await createDist("icons", { format: "esm" });
+
+	// copy svgs to icon dir the dist
+	await fs.copy(svgsDir, distIconDir);
+	await fs.copy(distIconDir, "website/assets/js/dist/icons");
 }
 
 // ===============================
 // Helper functions
 // ===============================
-
-async function combineCssFiles(inputPath) {
-	let result = "";
-	const stats = await fs.promises.stat(inputPath);
-
-	if (stats.isDirectory()) {
-		const entries = await fs.promises.readdir(inputPath);
-		for (const entry of entries) {
-			const fullEntryPath = path.join(inputPath, entry);
-			result += await combineCssFiles(fullEntryPath);
-		}
-	} else if (stats.isFile() && inputPath.endsWith(".css")) {
-		result += await fs.promises.readFile(inputPath, "utf8");
-	}
-
-	return result;
-}
 
 async function optimizeSvgs(inputPath) {
 	const stats = await fs.promises.stat(inputPath);

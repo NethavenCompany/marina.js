@@ -1,4 +1,4 @@
-import Store from "../core/Store.js";
+import Store from "./Store";
 
 function useStoreMethods(store: Store) {
 	return {

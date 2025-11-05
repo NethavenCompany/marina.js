@@ -1,5 +1,5 @@
 import { minifyFileContent, objectToArray } from "./util.js";
-import { createFile } from "./marina.esm.js";
+import { createFile } from "./dist/marina.js";
 
 const DEFAULT_TEMPLATE_OPTIONS = {
 	filename: "marina.js",
@@ -34,6 +34,7 @@ export async function build(
 ) {
 	const marinaFileTree = await getFileTree();
 	const selectedContent = reduceTree(marinaFileTree, chosenTreeProps);
+	
 	let jsContent = objectToArray(selectedContent, "values")
 		.map((item) => {
 			if (typeof item === "string") return item;
