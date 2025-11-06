@@ -1,12 +1,12 @@
 {
-  "name": "icons",
-  "version": "1.0.0",
-  "description": "marina.js icon component",
-  "license": "MIT",
-  "author": "Nethaven",
-  "type": "module",
-  "main": "src/index.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
+	"name": "@nethaven/marina-icons",
+	"version": "1.0.0",
+	"description": "marina.js icon component",
+	"license": "MIT",
+	"author": "Nethaven",
+	"type": "module",
+	"main": "src/index.ts",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	}
 }

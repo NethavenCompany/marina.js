@@ -3,7 +3,7 @@ import fs from "fs-extra";
 
 export const PACKAGE_NAMES = ["icons", "ui", "utils", "marina"];
 export const PACKAGE_DIR = path.join(import.meta.dirname, "../packages");
-export const DEFAULT_ESBUILD_CONFIG = {
+export const ESBUILD_CONFIG_DEFAULTS = {
 	minify: false,
 	format: "esm",
 	outfile: "index.js",
@@ -14,7 +14,7 @@ export function distDescription(minify, format) {
 }
 
 export function configDefaults(config) {
-	return { ...DEFAULT_ESBUILD_CONFIG, ...config };
+	return { ...ESBUILD_CONFIG_DEFAULTS, ...config };
 }
 
 export function pkgPath(pkgName) {

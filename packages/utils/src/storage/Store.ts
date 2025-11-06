@@ -22,10 +22,7 @@ export default class Store {
 	public products: Record<string, unknown>;
 	public defaultProducts: Record<string, unknown>;
 	public storage: Storage;
-	private subscriptions = new Map<
-		ElementSubscription,
-		(event: Event) => void
-	>();
+	private subscriptions = new Map<ElementSubscription, (event: Event) => void>();
 
 	constructor(
 		storeId: string,

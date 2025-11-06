@@ -35,9 +35,11 @@ export function setAttributes(
 ) {
 	for (const [key, value] of Object.entries(attributes)) {
 		switch (key) {
-			case "innerHTML": (element as any)[key] = value.trim();
+			case "innerHTML":
+				(element as any)[key] = value.trim();
 				break;
-			case "innerText": (element as any)[key] = value.trim();
+			case "innerText":
+				(element as any)[key] = value.trim();
 				break;
 			case "dataset":
 				for (const [dataKey, dataValue] of Object.entries(value)) {

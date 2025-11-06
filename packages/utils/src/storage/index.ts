@@ -27,7 +27,7 @@ export function useSessionStore(
 ): ReturnType<typeof useStoreMethods> {
 	const sessionStore = new Store(storeId, defaultProducts, sessionStorage);
 	return useStoreMethods(sessionStore);
-};
+}
 
 /**
  * Creates a new LocalStore.
@@ -39,4 +39,4 @@ export function useLocalStore(
 ): ReturnType<typeof useStoreMethods> {
 	const localStore = new Store(storeId, defaultProducts, localStorage);
 	return useStoreMethods(localStore);
-};
+}

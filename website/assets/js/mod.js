@@ -1,8 +1,5 @@
 import { build } from "./build-marina.js";
-import marina, {
-	createElement,
-	useLocalStore,
-} from "./dist/marina.js";
+import marina, { createElement, useLocalStore } from "./dist/marina.js";
 
 function getTreeInputs() {
 	return {};

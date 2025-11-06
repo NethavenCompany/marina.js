@@ -4,7 +4,7 @@ import Icon, { setAssetsPath } from "./component/Icon";
 customElements.define("m-icon", Icon);
 
 const icons = {
-    version: VERSION,
+	version: VERSION,
 	setAssetsPath,
 };
 

@@ -1,41 +1,44 @@
 {
-  "name": "@nethaven/marina",
-  "version": "1.0.0",
-  "description": "UI toolkit by Nethaven",
-  "keywords": [
-    "ui",
-    "ui toolkit",
-    "javascript"
-  ],
-  "homepage": "https://github.com/NethavenCompany/marina.js#readme",
-  "bugs": {
-    "url": "https://github.com/NethavenCompany/marina.js/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NethavenCompany/marina.js.git"
-  },
-  "license": "ISC",
-  "author": "Nethaven",
-  "type": "module",
-  "main": "dist/marina.global.js",
-  "module": "dist/marina.esm.js",
-  "browser": "dist/marina.global.js",
-  "exports": {
-    ".": {
-      "import": "./dist/marina.esm.js",
-      "require": "./dist/marina.global.js"
-    }
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "typecheck": "tsc --noEmit",
-    "build:marina": "node ./scripts/build.js",
-    "build": "npm run typecheck && npm run build:marina"
-  },
-  "devDependencies": {
-    "esbuild": "^0.25.11",
-    "fs-extra": "^11.3.2",
-    "svgo": "^4.0.0"
-  }
+	"name": "marina",
+	"version": "1.0.0",
+	"description": "UI toolkit by Nethaven",
+	"keywords": [
+		"ui",
+		"ui toolkit",
+		"javascript"
+	],
+	"homepage": "https://github.com/NethavenCompany/marina.js#readme",
+	"bugs": {
+		"url": "https://github.com/NethavenCompany/marina.js/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/NethavenCompany/marina.js.git"
+	},
+	"license": "ISC",
+	"author": "Nethaven",
+	"type": "module",
+	"main": "dist/marina.global.js",
+	"module": "dist/marina.esm.js",
+	"browser": "dist/marina.global.js",
+	"exports": {
+		".": {
+			"import": "./dist/marina.esm.js",
+			"require": "./dist/marina.global.js"
+		}
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"typecheck": "tsc --noEmit",
+		"clear:dists": "node ./scripts/clear-dists.js",
+		"build:marina": "node ./scripts/build.js",
+		"build": "npm run typecheck && npm run build:marina",
+		"format": "prettier --write \"**/*.{js,ts,json}\" --ignore-path .prettierignore"
+	},
+	"devDependencies": {
+		"esbuild": "^0.25.11",
+		"fs-extra": "^11.3.2",
+		"prettier": "^3.0.0",
+		"svgo": "^4.0.0"
+	}
 }

@@ -1,12 +1,12 @@
 {
-  "name": "marina",
-  "version": "1.0.0",
-  "description": "UI toolkit by Nethaven",
-  "license": "MIT",
-  "author": "Nethaven",
-  "type": "module",
-  "main": "dist/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
+	"name": "@nethaven/marina",
+	"version": "1.0.0",
+	"description": "UI toolkit by Nethaven",
+	"license": "MIT",
+	"author": "Nethaven",
+	"type": "module",
+	"main": "dist/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	}
 }

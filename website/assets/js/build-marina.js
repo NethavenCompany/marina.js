@@ -34,7 +34,7 @@ export async function build(
 ) {
 	const marinaFileTree = await getFileTree();
 	const selectedContent = reduceTree(marinaFileTree, chosenTreeProps);
-	
+
 	let jsContent = objectToArray(selectedContent, "values")
 		.map((item) => {
 			if (typeof item === "string") return item;

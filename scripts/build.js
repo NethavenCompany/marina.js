@@ -22,15 +22,29 @@ async function build() {
 	await Promise.all([
 		// The icons package is mainly svgs so needs a more specific build step.
 		createIconsDist(),
+
 		// everything else is typescript and the same structure so can use a similair build step.
 		createDist("utils", { format: "esm" }),
 		createDist("ui", { format: "esm" }),
 
 		// Lastly we create the marina package, which is just the previous 3 packages combined into one.
 		createDist("marina", { format: "esm", outfile: "marina.js" }),
-		createDist("marina", { minify: true, format: "esm", outfile: "marina.min.js" }),
-		createDist("marina", { format: "iife", outfile: "marina.global.js", globalName: "Marina" }),
-		createDist("marina", { minify: true, format: "iife", outfile: "marina.global.min.js", globalName: "Marina" }),
+		createDist("marina", {
+			minify: true,
+			format: "esm",
+			outfile: "marina.min.js",
+		}),
+		createDist("marina", {
+			format: "iife",
+			outfile: "marina.global.js",
+			globalName: "Marina",
+		}),
+		createDist("marina", {
+			minify: true,
+			format: "iife",
+			outfile: "marina.global.min.js",
+			globalName: "Marina",
+		}),
 	]);
 
 	// copy marina to static assets.
@@ -49,10 +63,12 @@ async function createDist(pkgName, config) {
 		...GLOBAL_CONFIG,
 		...config,
 		entryPoints: [pkg.indexFile],
-		outfile: pkg.outfile
+		outfile: pkg.outfile,
 	};
 
-	console.log(`Creating ${description} for ${pkgName} - outfile: ${pkg.outfile}`);
+	console.log(
+		`Creating ${description} for ${pkgName} - outfile: ${pkg.outfile}`
+	);
 
 	try {
 		return await esbuild.build(esbuildConfig);

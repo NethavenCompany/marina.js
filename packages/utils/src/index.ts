@@ -6,12 +6,12 @@ import * as storage from "./storage/index";
 import * as string from "./string/index";
 
 const utils = {
-    version: VERSION,
-    ...dom,
-    ...files,
-    ...storage,
-    ...string
-}
+	version: VERSION,
+	...dom,
+	...files,
+	...storage,
+	...string,
+};
 
 export * from "./dom/index";
 export * from "./files/index";

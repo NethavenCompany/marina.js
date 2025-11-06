@@ -2,7 +2,7 @@ export function minifyCss(...css: string[]) {
 	return (
 		css
 			.join(" ")
-			// Remove comments 
+			// Remove comments
 			.replace(/\/\*[\s\S]*?\*\//g, "")
 			// Remove unnecessary whitespace around selectors, properties, and values
 			.replace(/\s*{\s*/g, "{")

@@ -1,14 +1,14 @@
-import { MARINA_ICONS_PATH } from "../const";
-import { createElement, observe } from "@utils/dom";
-import { path } from "@utils/string"
+import { createElement, observe, minifyCss } from "@utils/index";
+import { CDN_BASE } from "../const";
+import { getIcon } from "./request";
 
 export default class Icon extends HTMLElement {
-	private static assetsPath = MARINA_ICONS_PATH;
+	static assetsPath = CDN_BASE;
 	private observer: MutationObserver | null = null;
 	private name: string | null = null;
 	private shadow: ShadowRoot | null = null;
 	private styles = createElement("style", {
-		innerHTML: `
+		innerHTML: minifyCss(`
             :host {
                 display: inline-block;
                 width: auto;
@@ -20,7 +20,7 @@ export default class Icon extends HTMLElement {
                 width: auto;
                 height: inherit;
             }
-        `,
+        `),
 	});
 	private icon: string | null = null;
 
@@ -28,12 +28,12 @@ export default class Icon extends HTMLElement {
 		super();
 		this.name = name;
 		this.observer = this.#setupObserver();
-		this.shadow = this.attachShadow({ mode: "closed" });
+		this.shadow = this.attachShadow({ mode: "open" });
 	}
 
 	async connectedCallback() {
 		this.name = this.getAttribute("name") || "";
-		this.icon = await this.getIcon(this.name);
+		this.icon = await getIcon(this.name);
 
 		if (!this.shadow || !this.icon) return;
 
@@ -42,15 +42,11 @@ export default class Icon extends HTMLElement {
 
 	disconnectedCallback() {
 		this.observer?.disconnect();
+		this.styles.remove();
 	}
 
 	static setAssetsPath(path: string) {
 		Icon.assetsPath = path;
-	}
-
-	async getIcon(name: string) {
-		const response = await fetch(path.join(Icon.assetsPath, `${name}.svg`));
-		return await response.text();
 	}
 
 	async setIcon(icon: string) {
@@ -72,7 +68,11 @@ export default class Icon extends HTMLElement {
 						if (!name) return;
 
 						this.name = name;
-						this.setIcon(await this.getIcon(name));
+						this.icon = await getIcon(name);
+
+						if (!this.icon) return;
+
+						this.setIcon(this.icon);
 					}
 				});
 			},
@@ -82,5 +82,5 @@ export default class Icon extends HTMLElement {
 }
 
 export function setAssetsPath(path: string) {
-	Icon.setAssetsPath(path);
+	Icon.assetsPath = path;
 }
