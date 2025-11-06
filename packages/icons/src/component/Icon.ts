@@ -45,10 +45,6 @@ export default class Icon extends HTMLElement {
 		this.styles.remove();
 	}
 
-	static setAssetsPath(path: string) {
-		Icon.assetsPath = path;
-	}
-
 	async setIcon(icon: string) {
 		if (!this.shadow || !icon) return;
 		this.shadow.innerHTML = "";
@@ -79,8 +75,4 @@ export default class Icon extends HTMLElement {
 			{ attributes: true, childList: false, subtree: false }
 		);
 	}
-}
-
-export function setAssetsPath(path: string) {
-	Icon.assetsPath = path;
 }
