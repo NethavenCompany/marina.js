@@ -15,7 +15,7 @@ export function capitalize(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function distDescription(minify, format,) {
+export function distDescription(minify, format) {
 	return `${minify ? "minified" : ""} ${format.toUpperCase()} build`.trim();
 }
 
