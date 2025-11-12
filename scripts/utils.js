@@ -1,5 +1,7 @@
 import path from "path";
 import fs from "fs-extra";
+import ora from "ora";
+import kleur from "kleur";
 
 export const PACKAGE_NAMES = ["icons", "ui", "utils", "marina"];
 export const PACKAGE_DIR = path.join(import.meta.dirname, "../packages");
@@ -9,7 +11,11 @@ export const ESBUILD_CONFIG_DEFAULTS = {
 	outfile: "index.js",
 };
 
-export function distDescription(minify, format) {
+export function capitalize(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export function distDescription(minify, format,) {
 	return `${minify ? "minified" : ""} ${format.toUpperCase()} build`.trim();
 }
 
@@ -19,8 +25,8 @@ export function configDefaults(config) {
 
 export function pkgPath(pkgName) {
 	return path.join(PACKAGE_DIR, pkgName);
-}
-``;
+};
+
 export function getPackagePaths(pkgName, outfileName) {
 	const rootDir = pkgPath(pkgName);
 	const distDir = path.join(rootDir, "dist");
@@ -32,8 +38,26 @@ export function getPackagePaths(pkgName, outfileName) {
 }
 
 export async function clearDistributables() {
+	const spinner = ora('Removing "dist" folder from packages').start();
+	const clearedDists = [];
+
 	for (const key of PACKAGE_NAMES) {
 		const paths = getPackagePaths(key);
-		await fs.remove(paths.distDir);
+
+		try {
+			await fs.remove(paths.distDir);
+		} catch {
+			continue;
+		}
+
+		clearedDists.push(kleur.red(key));
 	}
+
+	const lastIndex = clearedDists.splice(clearedDists.length - 1);
+
+	spinner.succeed(
+		capitalize(`${clearedDists.join(", ")} & ${lastIndex} distributables removed`)
+	);
+
+	return { spinner, clearedDists };
 }

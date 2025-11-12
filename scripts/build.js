@@ -1,6 +1,8 @@
 import esbuild from "esbuild";
 import fs from "fs-extra";
 import path from "path";
+import ora from "ora";
+import kleur from "kleur";
 import { optimize } from "svgo";
 
 import {
@@ -17,6 +19,8 @@ const GLOBAL_CONFIG = {
 };
 
 async function build() {
+	console.clear();
+
 	await clearDistributables();
 
 	await Promise.all([
@@ -56,9 +60,11 @@ async function build() {
 // ===============================
 
 async function createDist(pkgName, config) {
+	const spinner = ora();
 	const { minify, format, outfile } = configDefaults(config);
 	const pkg = getPackagePaths(pkgName, outfile);
-	const description = distDescription(minify, format);
+	const description = kleur.blue(distDescription(minify, format));
+	const displayName = kleur.red(pkgName);
 	const esbuildConfig = {
 		...GLOBAL_CONFIG,
 		...config,
@@ -66,15 +72,18 @@ async function createDist(pkgName, config) {
 		outfile: pkg.outfile,
 	};
 
-	console.log(
-		`Creating ${description} for ${pkgName} - outfile: ${pkg.outfile}`
+	spinner.start(
+		`Creating ${description} of ${displayName} - outfile: ${pkg.outfile}`
 	);
 
 	try {
-		return await esbuild.build(esbuildConfig);
+		const build = await esbuild.build(esbuildConfig);
+		spinner.clear();
+		spinner.succeed(`${description} of ${displayName} successfully created.`);
+		return build;
 	} catch (error) {
-		console.error(`Error creating ${description} for ${pkgName}:`, error);
-		throw error;
+		spinner.fail(`Error creating ${description} of ${displayName}:`, error);
+		return null;
 	}
 }
 
@@ -97,6 +106,7 @@ async function createIconsDist() {
 // ===============================
 
 async function optimizeSvgs(inputPath) {
+	const spinner = ora();
 	const stats = await fs.promises.stat(inputPath);
 	const isDirectory = stats.isDirectory();
 	const isFile = stats.isFile();
@@ -105,12 +115,16 @@ async function optimizeSvgs(inputPath) {
 	if (isDirectory) {
 		const entries = await fs.promises.readdir(inputPath);
 
-		console.log(`Optimizing ${entries.length} SVGs in directory: ${inputPath}`);
+		spinner.start(`Optimizing ${entries.length} SVGs in directory: ${inputPath}`);
 
 		for (const entry of entries) {
 			const fullEntryPath = path.join(inputPath, entry);
 			await optimizeSvgs(fullEntryPath);
 		}
+
+		spinner.succeed(
+			`${entries.length} SVGs optimized in directory: ${inputPath}`
+		);
 	} else if (isFile && isSvg) {
 		const content = await fs.promises.readFile(inputPath, "utf8");
 		const result = optimize(content, {
